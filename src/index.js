@@ -5,22 +5,31 @@ import ReactDOM from 'react-dom';
 //import {Child} from './anotherFile.js';
 console.log('index.js loaded');
 class MyStuff extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {worldName : 'World'}
+    this.colorClick = this.colorClick.bind(this);
+  }
+
+
   colorClick(e){
     console.log('you clicked:', e.target.value);
+    const newName = e.target.value;
+    this.setState({worldName: newName});
+
   }
   render(){
     return (
       <div>
-        <h1>Hello World</h1>
-        <h2>or Hello {this.props.name}</h2>
+        <h1>Hello {this.state.worldName}</h1>
         <select onChange={this.colorClick}>
-          <option value="blue" onClick={this.colorClick}>blue</option>
-          <option value="red" onClick={this.colorClick}>red</option>
-          <option value="green" onClick={this.colorClick}>green</option>
+          <option value="Blue World" onClick={this.colorClick}>blue</option>
+          <option value="Red World" onClick={this.colorClick}>red</option>
+          <option value="Green World" onClick={this.colorClick}>green</option>
         </select>
       </div>
     );
   }
 }
 
-ReactDOM.render(<MyStuff name="AnotherWorld"/>, document.getElementById('root'));
+ReactDOM.render(<MyStuff />, document.getElementById('root'));
