@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 //import './index.css';
 import {Changer} from './Changer.js';
 import {Displayer} from './Displayer.js';
+import {Misc} from './Misc.js'
 
 class MyStuff extends React.Component{
   constructor(props){
@@ -22,6 +23,7 @@ class MyStuff extends React.Component{
       <div>
         <Displayer worldName={this.state.worldName}/>
         <Changer changerMethod={this.changeName}/>
+        <Misc />
       </div>
     );
   }
