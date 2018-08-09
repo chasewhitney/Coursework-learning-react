@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+function goIndex2(){
+  document.location.href = './index2.html?v=2';
+}
 
 
 export class Misc extends React.Component {
@@ -34,6 +37,7 @@ export class Misc extends React.Component {
       <div>
 
       {reactArray}
+      <button onClick={goIndex2}>CLICK ME</button>
 
       </div>
     );

@@ -29,4 +29,13 @@ class MyStuff extends React.Component{
   }
 }
 
-ReactDOM.render(<MyStuff />, document.getElementById('root'));
+class MyOtherStuff extends React.Component {
+  state = { counter : 1}
+  render() {
+    return (
+      <button>{this.state.counter}</button>
+    )
+  }
+}
+
+ReactDOM.render(<MyOtherStuff />, document.getElementById('root'));
