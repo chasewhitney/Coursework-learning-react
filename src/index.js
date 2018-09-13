@@ -1,41 +1,53 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import './index.css';
-import {Changer} from './Changer.js';
-import {Displayer} from './Displayer.js';
-import {Misc} from './Misc.js'
+// import './index.css';
+// import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
-class MyStuff extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {worldName : 'Blue World'};
-    this.changeName = this.changeName.bind(this);
-  }
+const mountNode = document.getElementById('root');
 
-  changeName(newName){
-    console.log('in changeName with:', newName);
-    this.setState({worldName : newName});
+class Button extends React.Component {
+  handleClick = () => {
+    this.props.onClickFunction(this.props.incrementValue);
   }
 
   render(){
-    return (
-      <div>
-        <Displayer worldName={this.state.worldName}/>
-        <Changer changerMethod={this.changeName}/>
-        <Misc />
-      </div>
-    );
-  }
-}
-
-class MyOtherStuff extends React.Component {
-  state = { counter : 1}
-  render() {
-    return (
-      <button>{this.state.counter}</button>
+    return(
+      <button onClick={this.handleClick}>
+        +{this.props.incrementValue}
+      </button>
     )
   }
 }
 
-ReactDOM.render(<MyOtherStuff />, document.getElementById('root'));
+const Result = (props) => {
+  return(
+    <div>{props.counterVal}</div>
+  )
+}
+
+class App extends React.Component{
+  state = {counter : 0};
+
+  incrementCounter = (incrementValue) => {
+    this.setState((prevState) => ({
+      counter: prevState.counter + incrementValue
+    }));
+  }
+
+  render(){
+    return(
+      <div>
+       <Button incrementValue={1} onClickFunction={this.incrementCounter}/>
+       <Button incrementValue={5} onClickFunction={this.incrementCounter}/>
+       <Button incrementValue={10} onClickFunction={this.incrementCounter}/>
+       <Button incrementValue={100} onClickFunction={this.incrementCounter}/>
+       <Result counterVal={this.state.counter}/>
+      </div>
+    );
+  };
+}
+
+ReactDOM.render(<App/>, mountNode);
+
+registerServiceWorker();
