@@ -3,51 +3,87 @@ import ReactDOM from 'react-dom';
 // import './index.css';
 // import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import axios from 'axios';
 
 const mountNode = document.getElementById('root');
 
-class Button extends React.Component {
-  handleClick = () => {
-    this.props.onClickFunction(this.props.incrementValue);
-  }
+const Card = (props) => {
+	return (
+  	<div style={{margin: '1em'}}>
+    	<img width="75" src={props.avatar_url} />
+      <div style={{display: 'inline-block', marginLeft: 10}}>
+        <div style={{fontSize: '1.25em', fontWeight: 'bold'}}>{props.name}</div>
+        <div>{props.company}</div>
+      </div>
+    </div>
+  );
+};
 
-  render(){
-    return(
-      <button onClick={this.handleClick}>
-        +{this.props.incrementValue}
-      </button>
-    )
-  }
-}
-
-const Result = (props) => {
-  return(
-    <div>{props.counterVal}</div>
+const CardList = (props) => {
+	let cards = props.cards;
+	return (
+  	<div>
+			{props.cards.map(card => <Card key={card.id} {...card}/>)}
+    </div>
   )
 }
 
-class App extends React.Component{
-  state = {counter : 0};
+class Form extends React.Component {
+	state = {userName: ''}
+	handleSubmit = (event) => {
+  	event.preventDefault();
+    const url = 'https://api.github.com/users/' + this.state.userName;
+		axios.get(url).then(resp=> {
+    	this.props.onSubmit(resp.data);
+      this.setState({userName: ''});
+    });
 
-  incrementCounter = (incrementValue) => {
-    this.setState((prevState) => ({
-      counter: prevState.counter + incrementValue
-    }));
+		// $.ajax({
+		// 	type: 'GET',
+		// 	url: url,
+		// 	success: resp => {
+	  //   	this.props.onSubmit(resp.data);
+	  //   	this.setState({userName: ''});
+		// 	}
+		// });
+
   }
 
-  render(){
-    return(
-      <div>
-       <Button incrementValue={1} onClickFunction={this.incrementCounter}/>
-       <Button incrementValue={5} onClickFunction={this.incrementCounter}/>
-       <Button incrementValue={10} onClickFunction={this.incrementCounter}/>
-       <Button incrementValue={100} onClickFunction={this.incrementCounter}/>
-       <Result counterVal={this.state.counter}/>
-      </div>
+	render() {
+  	return (
+    	<form onSubmit={this.handleSubmit}>
+      	<input type="text"
+        	value={this.state.userName}
+          onChange={(event)=>this.setState({userName:event.target.value})}
+        	placeholder="Github username" required />
+        <button type="submit">Add Card</button>
+      </form>
     );
   };
 }
 
-ReactDOM.render(<App/>, mountNode);
+class App extends React.Component {
+	state = {
+  	cards: []
+  };
+
+	addNewCard = (cardInfo) => {
+    this.setState(prevState => ({
+    	cards: prevState.cards.concat(cardInfo)
+    }));
+  };
+
+	render() {
+  	return (
+    	<div>
+      	<Form onSubmit={this.addNewCard}/>
+        <CardList cards={this.state.cards} />
+      </div>
+    );
+  }
+}
+
+
+ReactDOM.render(<App />, mountNode);
 
 registerServiceWorker();
